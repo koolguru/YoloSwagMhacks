@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import com.firebase.client.Firebase;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -23,6 +25,9 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+        Firebase.setAndroidContext(this); //Firebase intialization
+        Firebase understoodFirebase = new Firebase("https://stufflocater.firebaseio.com/");
+        understoodFirebase.child("Init Confirmation").setValue("Firebase intialized");
     }
 
 
