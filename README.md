@@ -6,6 +6,9 @@ Firebase
 Google Play Location
 
 Upon starting the app, it calls several set up functions and tries to initialize location stuff.
+
+
+
 TODO next: 
 
 (IMPORTANT) get this running on both API level 23 (Android 6.0.0) as well as lower API levels, I think it only works on 6.0.0 right now
@@ -23,6 +26,9 @@ Display drive time areas, display union of said drive time areas
 Figure out how to find points of interest in said union
 
 Display those
+
+
+
 
 SETUP INSTRUCTIONS
 Install android studio
