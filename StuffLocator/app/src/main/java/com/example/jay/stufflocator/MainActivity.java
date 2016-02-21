@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         //setup stuff
         createLocationRequest();
         buildGoogleApiClient();
-        startLocationUpdates();
         Firebase.setAndroidContext(this); //Firebase intialization
         Firebase understoodFirebase = new Firebase("https://stufflocater.firebaseio.com/");
         understoodFirebase.child("Init Confirmation").setValue("Firebase intialized");
@@ -118,8 +117,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     //set up location updates
     protected void startLocationUpdates(){
-        //if statement only required on API level 23 - figure out workaround for lower API levels
-        if(checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if(Build.VERSION.SDK_INT == 23) {
+            //if statement only required on API level 23
+            if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            }
+        } else {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
     }
@@ -130,9 +133,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     public void onConnected(Bundle connectionHint){
-        //again if statement only required on API level 23
-        if(checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            //get current location
+        if(Build.VERSION.SDK_INT == 23) {
+            //again if statement only required on API level 23
+            if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                //get current location
+                mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            }
+        } else {
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         }
         //set map to center on current location
@@ -142,6 +149,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mMapView.setMapOptions(mMapOptions);
         //call this to check if locations actually is correct
         Log.i("Location", String.valueOf(mCurrentLocation.getLatitude()));
+
+        startLocationUpdates();
     }
 
     public void onConnectionSuspended(int cause){
